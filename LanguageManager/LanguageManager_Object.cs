@@ -13,7 +13,15 @@ namespace MultiLanguage
     {
         private void CollectObjectText(object obj)
         {
-            if (obj is Control)
+            if (obj is ComboBox)
+            {
+                foreach (object item in (obj as ComboBox).Items)
+                { 
+                    if (item is string)
+                        FillTranslateDict(item.ToString());
+                }
+            }
+            else if (obj is Control)
             {
                 FillTranslateDict((obj as Control).Text);
             }
@@ -22,21 +30,42 @@ namespace MultiLanguage
         {
             int hash = obj.GetHashCode();
 
-            if (obj is Control)
+            if (obj is ComboBox)
+            {
+                ComboBox c = obj as ComboBox;
+                List<string> texts = new List<string>();
+                foreach (object item in c.Items)
+                {
+                    if (item is string)
+                        texts.Add(item.ToString());
+                    else
+                        texts.Add(null);
+                }
+
+                if (texts.Exists(t => !string.IsNullOrEmpty(t)))
+                    FillSourceDict(hash, texts.ToArray());
+            }
+            else if (obj is Control)
             {
                 FillSourceDict(hash, new string[] { (obj as Control).Text });
             }
         }
         private void ChangeObjectLanguage(object obj)
         {
+            int hash = obj.GetHashCode();
+            
             if (obj is ComboBox)
             {
-                //ComboBox c = obj as ComboBox;
-                //if (_sourceDict.TryGetValue(c.GetHashCode(), out string[] texts))
-                //{
-                //    c.Items.Clear();
-                //    c.Items.AddRange(TranslateText(texts[0]).Split(','));
-                //}
+                ComboBox c = obj as ComboBox;
+                if (_sourceDict.TryGetValue(hash, out string[] texts))
+                {
+                    int count = Math.Min(c.Items.Count, texts.Length);
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (c.Items[i] is string)
+                            c.Items[i] = TranslateText(texts[i]);
+                    }
+                }
             }
             else if (obj is Control)
             {

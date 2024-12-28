@@ -35,11 +35,24 @@ namespace Demo
         }
         private void cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_language.IsChangingLanguage)
+                return;
+
             _language.CurrentLanguage = cmb_Language.SelectedIndex == 0 ? "zh-CN" : "en-US";
             _language.ChangeLanguage(this);
         }
+
         #endregion
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int i = 5;
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //comboBox1.Items.Clear();
+            //comboBox1.Items.AddRange(new object[] { "a", "b" });
+        }
     }
 }

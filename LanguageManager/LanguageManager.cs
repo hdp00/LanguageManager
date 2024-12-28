@@ -39,6 +39,9 @@ namespace MultiLanguage
                     _currentLanguageIndex = index;
             }
         }
+        //是否正在切换语言
+        private bool _isChangingLanguage = false;
+        public bool IsChangingLanguage => _isChangingLanguage;
         #endregion
 
         #region field
@@ -152,6 +155,7 @@ namespace MultiLanguage
         {
             if (!_hasInited)
                 return;
+            _isChangingLanguage = true;
 
             ChangeObjectLanguage(control);
 
@@ -162,6 +166,8 @@ namespace MultiLanguage
                 else
                     ChangeObjectLanguage(item);
             }
+
+            _isChangingLanguage = false;
         }
         #endregion
 
