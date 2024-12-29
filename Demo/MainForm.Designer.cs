@@ -38,6 +38,7 @@
             this.工具栏DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +57,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmb_Language,
             this.toolStripLabel1,
-            this.toolStripDropDownButton1});
+            this.toolStripDropDownButton1,
+            this.toolStripComboBox1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1117, 25);
@@ -93,13 +95,13 @@
             // 工具栏CToolStripMenuItem
             // 
             this.工具栏CToolStripMenuItem.Name = "工具栏CToolStripMenuItem";
-            this.工具栏CToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.工具栏CToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.工具栏CToolStripMenuItem.Text = "工具栏C";
             // 
             // 工具栏DToolStripMenuItem
             // 
             this.工具栏DToolStripMenuItem.Name = "工具栏DToolStripMenuItem";
-            this.工具栏DToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.工具栏DToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.工具栏DToolStripMenuItem.Text = "工具栏D";
             // 
             // comboBox1
@@ -117,13 +119,22 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(481, 323);
+            this.button1.Location = new System.Drawing.Point(85, 236);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(154, 23);
             this.button1.TabIndex = 3;
             this.button1.Text = "收集文本";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox1.Items.AddRange(new object[] {
+            "选项A",
+            "选项B"});
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
             // 
             // MainForm
             // 
@@ -155,6 +166,7 @@
         private System.Windows.Forms.ToolStripMenuItem 工具栏DToolStripMenuItem;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
     }
 }
 

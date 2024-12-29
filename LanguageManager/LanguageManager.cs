@@ -109,7 +109,7 @@ namespace MultiLanguage
         {
             CollectObjectText(control);
 
-            foreach (object item in control.Controls)
+            foreach (Control item in control.Controls)
             {
                 if (item is Control)
                     CollectText(item as Control);
@@ -141,7 +141,7 @@ namespace MultiLanguage
                     InitObjectLanguage(item);
             }
         }
-        private void FillSourceDict(int hash, string[] texts)
+        private void FillSourceDict(int hash, params string[] texts)
         {
             if (Array.Exists(texts, text => !string.IsNullOrWhiteSpace(text)))
             {

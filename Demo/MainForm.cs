@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,6 @@ namespace Demo
         public MainForm()
         {
             InitializeComponent();
-            cmb_Language.SelectedIndex = 0;
         }
 
         #region field
@@ -32,6 +32,7 @@ namespace Demo
         private void MainForm_Load(object sender, EventArgs e)
         {
             _language.InitLanguage(this);
+            cmb_Language.SelectedIndex = 0;
         }
         private void cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -53,6 +54,15 @@ namespace Demo
         {
             //comboBox1.Items.Clear();
             //comboBox1.Items.AddRange(new object[] { "a", "b" });
+            Test(1, 2);
+            Test(new int[] { 1, 2 });
+            Test();
         }
+
+        private void Test(params int[] values)
+        {
+            int i = 5;
+        }
+
     }
 }

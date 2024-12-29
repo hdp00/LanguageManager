@@ -11,9 +11,17 @@ namespace MultiLanguage
 {
     public partial class LanguageManager
     {
+        #region collect text
         private void CollectObjectText(object obj)
         {
-            if (obj is ComboBox)
+            if (obj is ToolStrip)
+            { 
+                foreach(ToolStripItem item in (obj as ToolStrip).Items)
+                {
+                    CollectToolStripItemText(item);
+                }
+            }
+            else if (obj is ComboBox)
             {
                 foreach (object item in (obj as ComboBox).Items)
                 { 
@@ -26,11 +34,39 @@ namespace MultiLanguage
                 FillTranslateDict((obj as Control).Text);
             }
         }
+        private void CollectToolStripItemText(ToolStripItem item)
+        {
+            if (item is ToolStripControlHost)
+            {
+                CollectObjectText((item as ToolStripControlHost).Control);
+            }
+            else
+            {
+                FillTranslateDict(item.Text);
+                FillTranslateDict(item.ToolTipText);
+
+                if (item is ToolStripDropDownItem)
+                {
+                    foreach (ToolStripItem i in (item as ToolStripDropDownItem).DropDownItems)
+                        CollectToolStripItemText(i);
+                }
+            }
+        }
+        #endregion
+
+        #region init language
         private void InitObjectLanguage(object obj)
         {
             int hash = obj.GetHashCode();
 
-            if (obj is ComboBox)
+            if (obj is ToolStrip)
+            {
+                foreach (ToolStripItem item in (obj as ToolStrip).Items)
+                {
+                    InitToolStripItemLanguage(item);
+                }
+            }
+            else if (obj is ComboBox)
             {
                 ComboBox c = obj as ComboBox;
                 List<string> texts = new List<string>();
@@ -50,12 +86,40 @@ namespace MultiLanguage
                 FillSourceDict(hash, new string[] { (obj as Control).Text });
             }
         }
+        private void InitToolStripItemLanguage(ToolStripItem item)
+        {
+            if (item is ToolStripControlHost)
+            {
+                InitObjectLanguage((item as ToolStripControlHost).Control);
+            }
+            else
+            {
+                FillSourceDict(item.GetHashCode(), item.Text, item.ToolTipText);
+
+                if (item is ToolStripDropDownItem)
+                {
+                    foreach (ToolStripItem i in (item as ToolStripDropDownItem).DropDownItems)
+                        InitToolStripItemLanguage(i);
+                }
+            }
+        }
+        #endregion
+
+        #region change language
         private void ChangeObjectLanguage(object obj)
         {
             int hash = obj.GetHashCode();
-            
-            if (obj is ComboBox)
+
+            if (obj is ToolStrip)
             {
+                foreach (ToolStripItem item in (obj as ToolStrip).Items)
+                {
+                    ChangeToolStripItemLanguage(item);
+                }
+            }
+            else if (obj is ComboBox)
+            {
+                //combox修改Items时，会触发SelectedIndexChanged事件，导致多次调用ChangeObjectLanguage
                 ComboBox c = obj as ComboBox;
                 if (_sourceDict.TryGetValue(hash, out string[] texts))
                 {
@@ -74,5 +138,27 @@ namespace MultiLanguage
                     c.Text = TranslateText(texts[0]);
             }
         }
+        private void ChangeToolStripItemLanguage(ToolStripItem item)
+        {
+            if (item is ToolStripControlHost)
+            {
+                ChangeObjectLanguage((item as ToolStripControlHost).Control);
+            }
+            else
+            {
+                if (_sourceDict.TryGetValue(item.GetHashCode(), out string[] texts))
+                { 
+                    item.Text = TranslateText(texts[0]);
+                    item.ToolTipText = TranslateText(texts[1]);
+                }
+
+                if (item is ToolStripDropDownItem)
+                {
+                    foreach (ToolStripItem i in (item as ToolStripDropDownItem).DropDownItems)
+                        ChangeToolStripItemLanguage(i);
+                }
+            }
+        }
+        #endregion
     }
 }
