@@ -12,46 +12,7 @@ namespace MultiLanguage
     public partial class LanguageManager
     {
         #region collect text
-        private void CollectObjectText(object obj)
-        {
-            if (obj is ToolStrip)
-            { 
-                foreach(ToolStripItem item in (obj as ToolStrip).Items)
-                {
-                    CollectToolStripItemText(item);
-                }
-            }
-            else if (obj is ComboBox)
-            {
-                foreach (object item in (obj as ComboBox).Items)
-                { 
-                    if (item is string)
-                        FillTranslateDict(item.ToString());
-                }
-            }
-            else if (obj is Control)
-            {
-                FillTranslateDict((obj as Control).Text);
-            }
-        }
-        private void CollectToolStripItemText(ToolStripItem item)
-        {
-            if (item is ToolStripControlHost)
-            {
-                CollectObjectText((item as ToolStripControlHost).Control);
-            }
-            else
-            {
-                FillTranslateDict(item.Text);
-                FillTranslateDict(item.ToolTipText);
 
-                if (item is ToolStripDropDownItem)
-                {
-                    foreach (ToolStripItem i in (item as ToolStripDropDownItem).DropDownItems)
-                        CollectToolStripItemText(i);
-                }
-            }
-        }
         #endregion
 
         #region init language

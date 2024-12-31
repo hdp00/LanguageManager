@@ -105,19 +105,55 @@ namespace MultiLanguage
         #endregion
 
         #region collect text. 收集需要翻译的信息
-        public void CollectText(Control control)
+        public void CollectText(Control value)
         {
-            CollectObjectText(control);
+                CollectTextControl(value);
 
-            foreach (Control item in control.Controls)
-            {
-                if (item is Control)
+                foreach (Control item in value.Controls)
+                {
                     CollectText(item as Control);
-                else
-                    CollectObjectText(item);
+                }
+        }
+        private void CollectTextControl(Control value)
+        {
+            if (value is ToolStrip)
+            { 
+                CollectTextToolStrip((ToolStrip)value);
+            }
+            else if (value is ComboBox)
+            {
+                foreach (object item in (value as ComboBox).Items)
+                {
+                    if (item is string)
+                        FillTranslateDict(item.ToString());
+                }
+            }
+            else
+            {
+                FillTranslateDict(value.Text);
             }
         }
-        private void FillTranslateDict(string text)
+
+        private void CollectTextToolStrip(ToolStrip value)
+        {
+            foreach (ToolStripItem item in value.Items)
+            {
+                CollectTextToolStripItem(item);
+            }
+        }
+        private void CollectTextToolStripItem(ToolStripItem value)
+        {
+                FillTranslateDict(value.Text);
+                FillTranslateDict(value.ToolTipText);
+
+                if (value is ToolStripDropDownItem)
+                {
+                    foreach (ToolStripItem item in (value as ToolStripDropDownItem).DropDownItems)
+                        CollectTextToolStripItem(item);
+                }
+        }
+
+        internal void FillTranslateDict(string text)
         {
             if (string.IsNullOrWhiteSpace(text) || TranslateDict.ContainsKey(text))
                 return;
@@ -171,10 +207,29 @@ namespace MultiLanguage
         }
         #endregion
 
+        #region control operation
 
+        #endregion
 
+    }
 
+    public class Operation
+    {
+        public Operation(LanguageManager container) 
+        {
+            Container = container;
+        }
+        
+        public readonly LanguageManager Container;
+    }
 
+    public class ToolStripOperation: Operation
+    {
+        public ToolStripOperation(LanguageManager container) : base(container) { }
+    }
 
+    public class ComboBoxOperation
+    { 
+    
     }
 }
