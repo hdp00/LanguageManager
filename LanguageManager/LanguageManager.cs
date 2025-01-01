@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.Data;
 using System.Diagnostics.Eventing.Reader;
+using System.Security.Policy;
 
 namespace MultiLanguage
 {
@@ -51,14 +52,14 @@ namespace MultiLanguage
         private Dictionary<string, string[]> TranslateDict => _translateData.Data;
         //<hash, texts> 初始的文本数据
         private Dictionary<int, string[]> _sourceDict = new Dictionary<int, string[]>();
-        //是否已经初始化
-        private bool _hasInited = false;
+        //控件操作
+        private ControlOperationManager _oper => new ControlOperationManager(this);
         #endregion
 
         #region public function
         //翻译文本
         public string TranslateText(string text)
-        { 
+        {
             if (!string.IsNullOrEmpty(text) && TranslateDict.TryGetValue(text, out string[] texts))
             {
                 if (texts != null && texts.Length > _currentLanguageIndex && !string.IsNullOrWhiteSpace(texts[_currentLanguageIndex]))
@@ -107,26 +108,22 @@ namespace MultiLanguage
         #region collect text. 收集需要翻译的信息
         public void CollectText(Control value)
         {
-                CollectTextControl(value);
+            CollectTextControl(value);
 
-                foreach (Control item in value.Controls)
-                {
-                    CollectText(item as Control);
-                }
+            foreach (Control item in value.Controls)
+            {
+                CollectText(item);
+            }
         }
         private void CollectTextControl(Control value)
         {
             if (value is ToolStrip)
-            { 
-                CollectTextToolStrip((ToolStrip)value);
+            {
+                _oper.ToolStrip.CollectText((ToolStrip)value);
             }
             else if (value is ComboBox)
             {
-                foreach (object item in (value as ComboBox).Items)
-                {
-                    if (item is string)
-                        FillTranslateDict(item.ToString());
-                }
+                _oper.ComboBox.CollectText((ComboBox)value);
             }
             else
             {
@@ -134,50 +131,44 @@ namespace MultiLanguage
             }
         }
 
-        private void CollectTextToolStrip(ToolStrip value)
+        internal void FillTranslateDict(params string[] texts)
         {
-            foreach (ToolStripItem item in value.Items)
+            foreach (string text in texts)
             {
-                CollectTextToolStripItem(item);
+                if (string.IsNullOrWhiteSpace(text) || TranslateDict.ContainsKey(text))
+                    continue;
+
+                TranslateDict[text] = null;
             }
-        }
-        private void CollectTextToolStripItem(ToolStripItem value)
-        {
-                FillTranslateDict(value.Text);
-                FillTranslateDict(value.ToolTipText);
-
-                if (value is ToolStripDropDownItem)
-                {
-                    foreach (ToolStripItem item in (value as ToolStripDropDownItem).DropDownItems)
-                        CollectTextToolStripItem(item);
-                }
-        }
-
-        internal void FillTranslateDict(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text) || TranslateDict.ContainsKey(text))
-                return;
-
-            TranslateDict[text] = null;
         }
         #endregion
 
         #region  init language 获取所有控件的初始文本
         public void InitLanguage(Control control)
         {
-            _hasInited = true;
+            InitLanguageControl(control);
 
-            InitObjectLanguage(control);
-
-            foreach (object item in control.Controls)
+            foreach (Control item in control.Controls)
             {
-                if (item is Control)
-                    InitLanguage(item as Control);
-                else
-                    InitObjectLanguage(item);
+                InitLanguage(item);
             }
         }
-        private void FillSourceDict(int hash, params string[] texts)
+        private void InitLanguageControl(Control value)
+        {
+            if (value is ToolStrip)
+            {
+                _oper.ToolStrip.InitLanguage((ToolStrip)value);
+            }
+            else if (value is ComboBox)
+            {
+                _oper.ComboBox.InitLanguage((ComboBox)value);
+            }
+            else
+            {
+                FillSourceDict(value.GetHashCode(), value.Text);
+            }
+        }
+        internal void FillSourceDict(int hash, params string[] texts)
         {
             if (Array.Exists(texts, text => !string.IsNullOrWhiteSpace(text)))
             {
@@ -187,49 +178,46 @@ namespace MultiLanguage
         #endregion
 
         #region change language 切换语言
-        public void ChangeLanguage(Control control)
+        public void ChangeLanguage(Control value, bool needChangeSign)
         {
-            if (!_hasInited)
-                return;
-            _isChangingLanguage = true;
+            if (needChangeSign)
+                _isChangingLanguage = true;
 
-            ChangeObjectLanguage(control);
+            ChangeLanguage(value);
 
-            foreach (object item in control.Controls)
+            if (needChangeSign)
+                _isChangingLanguage = false;
+        }
+
+        private void ChangeLanguage(Control value)
+        {
+            ChangeLanguageControl(value);
+
+            foreach (Control item in value.Controls)
             {
-                if (item is Control)
-                    ChangeLanguage(item as Control);
-                else
-                    ChangeObjectLanguage(item);
+                ChangeLanguage(item);
             }
-
-            _isChangingLanguage = false;
         }
-        #endregion
-
-        #region control operation
-
-        #endregion
-
-    }
-
-    public class Operation
-    {
-        public Operation(LanguageManager container) 
+        private void ChangeLanguageControl(Control value)
         {
-            Container = container;
+            if (value is ToolStrip)
+            {
+                _oper.ToolStrip.ChangeLanguage((ToolStrip)value);
+            }
+            else if (value is ComboBox)
+            {
+                _oper.ComboBox.ChangeLanguage((ComboBox)value);
+            }
+            else
+            {
+                if (GetSourceText(value.GetHashCode(), out string[] texts))
+                    value.Text = TranslateText(texts[0]);
+            }
         }
-        
-        public readonly LanguageManager Container;
-    }
-
-    public class ToolStripOperation: Operation
-    {
-        public ToolStripOperation(LanguageManager container) : base(container) { }
-    }
-
-    public class ComboBoxOperation
-    { 
-    
+        internal bool GetSourceText(int hash, out string[] texts)
+        {
+            return _sourceDict.TryGetValue(hash, out texts);
+        }
+        #endregion
     }
 }

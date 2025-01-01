@@ -40,14 +40,13 @@ namespace Demo
                 return;
 
             _language.CurrentLanguage = cmb_Language.SelectedIndex == 0 ? "zh-CN" : "en-US";
-            _language.ChangeLanguage(this);
+            _language.ChangeLanguage(this, true);
         }
 
         #endregion
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int i = 5;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -61,7 +60,6 @@ namespace Demo
 
         private void Test(params int[] values)
         {
-            int i = 5;
         }
 
     }

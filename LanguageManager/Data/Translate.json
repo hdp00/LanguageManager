@@ -4,10 +4,27 @@
     "en-US"
   ],
   "Data": {
-    "Form1": null,
-    "Demo": null,
-    "toolStrip1": null,
-    "zh-CN": null,
-    "收集文本": [null, "Collect text"]
+    "收集文本": [
+      null,
+      "Collect text"
+    ],
+    "演示窗体": [
+      null,
+      "Demo Form"
+    ],
+    "选项A": [
+      null,
+      "Option A"
+    ],
+    "选项B": [
+      null,
+      "Option B"
+    ],
+    "中文": null,
+    "English": null,
+    "工具栏A": [ null, "Tool A" ],
+    "工具栏B": [ null, "Tool B" ],
+    "工具栏C": [ null, "Tool C" ],
+    "工具栏D": [ null, "Tool D" ]
   }
 }
