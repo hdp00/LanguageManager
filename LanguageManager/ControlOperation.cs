@@ -1,5 +1,6 @@
 ﻿//控件操作类
 //by hdp 2025.01.01
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,12 +54,19 @@ namespace MultiLanguage
         }
         private void CollectTextToolStripItem(ToolStripItem value)
         {
-            Container.FillTranslateDict(value.Text, value.ToolTipText);
-
-            if (value is ToolStripDropDownItem)
+            if (value is ToolStripControlHost)
             {
-                foreach (ToolStripItem item in (value as ToolStripDropDownItem).DropDownItems)
-                    CollectTextToolStripItem(item);
+                Container.CollectText((value as ToolStripControlHost).Control);
+            }
+            else
+            {
+                Container.FillTranslateDict(value.Text, value.ToolTipText);
+
+                if (value is ToolStripDropDownItem)
+                {
+                    foreach (ToolStripItem item in (value as ToolStripDropDownItem).DropDownItems)
+                        CollectTextToolStripItem(item);
+                }
             }
         }
         #endregion
@@ -73,12 +81,19 @@ namespace MultiLanguage
         }
         private void InitLanguageToolStripItem(ToolStripItem value)
         {
-            Container.FillSourceDict(value.GetHashCode(), value.Text, value.ToolTipText);
-
-            if (value is ToolStripDropDownItem)
+            if (value is ToolStripControlHost)
             {
-                foreach (ToolStripItem item in (value as ToolStripDropDownItem).DropDownItems)
-                    InitLanguageToolStripItem(item);
+                Container.InitLanguage((value as ToolStripControlHost).Control);
+            }
+            else
+            {
+                Container.FillSourceDict(value.GetHashCode(), value.Text, value.ToolTipText);
+
+                if (value is ToolStripDropDownItem)
+                {
+                    foreach (ToolStripItem item in (value as ToolStripDropDownItem).DropDownItems)
+                        InitLanguageToolStripItem(item);
+                }
             }
         }
         #endregion
@@ -91,18 +106,25 @@ namespace MultiLanguage
                 ChangeLanguageToolStripItem(item);
             }
         }
-        private void ChangeLanguageToolStripItem(ToolStripItem valule)
+        private void ChangeLanguageToolStripItem(ToolStripItem value)
         {
-            if (Container.GetSourceText(valule.GetHashCode(), out string[] texts))
+            if (value is ToolStripControlHost)
             {
-                valule.Text = Container.TranslateText(texts[0]);
-                valule.ToolTipText = Container.TranslateText(texts[1]);
+                Container.ChangeLanguage((value as ToolStripControlHost).Control);
             }
-
-            if (valule is ToolStripDropDownItem)
+            else
             {
-                foreach (ToolStripItem item in (valule as ToolStripDropDownItem).DropDownItems)
-                    ChangeLanguageToolStripItem(item);
+                if (Container.GetSourceText(value.GetHashCode(), out string[] texts))
+                {
+                    value.Text = Container.TranslateText(texts[0]);
+                    value.ToolTipText = Container.TranslateText(texts[1]);
+                }
+
+                if (value is ToolStripDropDownItem)
+                {
+                    foreach (ToolStripItem item in (value as ToolStripDropDownItem).DropDownItems)
+                        ChangeLanguageToolStripItem(item);
+                }
             }
         }
         #endregion

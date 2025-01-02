@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Security.Policy;
+using Newtonsoft.Json.Linq;
 
 namespace MultiLanguage
 {
@@ -110,6 +111,8 @@ namespace MultiLanguage
         {
             CollectTextControl(value);
 
+            if (value is ToolStrip)
+                return;
             foreach (Control item in value.Controls)
             {
                 CollectText(item);
@@ -144,11 +147,13 @@ namespace MultiLanguage
         #endregion
 
         #region  init language 获取所有控件的初始文本
-        public void InitLanguage(Control control)
+        public void InitLanguage(Control value)
         {
-            InitLanguageControl(control);
+            InitLanguageControl(value);
 
-            foreach (Control item in control.Controls)
+            if (value is ToolStrip)
+                return;
+            foreach (Control item in value.Controls)
             {
                 InitLanguage(item);
             }
@@ -189,10 +194,12 @@ namespace MultiLanguage
                 _isChangingLanguage = false;
         }
 
-        private void ChangeLanguage(Control value)
+        internal void ChangeLanguage(Control value)
         {
             ChangeLanguageControl(value);
 
+            if (value is ToolStrip)
+                return;
             foreach (Control item in value.Controls)
             {
                 ChangeLanguage(item);
