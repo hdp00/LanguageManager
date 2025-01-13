@@ -54,6 +54,9 @@ namespace MultiLanguage
         }
         private void CollectTextToolStripItem(ToolStripItem value)
         {
+            if (!Container.Exlude.IsValid(value))
+                return;
+
             if (value is ToolStripControlHost)
             {
                 Container.CollectText((value as ToolStripControlHost).Control);
@@ -76,11 +79,15 @@ namespace MultiLanguage
         {
             foreach (ToolStripItem item in value.Items)
             {
-                InitLanguageToolStripItem(item);
+                if (Container.Exlude.IsValid(item))
+                    InitLanguageToolStripItem(item);
             }
         }
         private void InitLanguageToolStripItem(ToolStripItem value)
         {
+            if (!Container.Exlude.IsValid(value))
+                return;
+
             if (value is ToolStripControlHost)
             {
                 Container.InitLanguage((value as ToolStripControlHost).Control);
@@ -108,6 +115,9 @@ namespace MultiLanguage
         }
         private void ChangeLanguageToolStripItem(ToolStripItem value)
         {
+            if (!Container.Exlude.IsValid(value))
+                return;
+
             if (value is ToolStripControlHost)
             {
                 Container.ChangeLanguage((value as ToolStripControlHost).Control);

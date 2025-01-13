@@ -41,7 +41,7 @@ namespace MultiLanguage
                     _currentLanguageIndex = index;
             }
         }
-        //是否正在切换语言
+        //标记是否正在切换语言
         private bool _isChangingLanguage = false;
         public bool IsChangingLanguage => _isChangingLanguage;
         #endregion
@@ -109,6 +109,9 @@ namespace MultiLanguage
         #region collect text. 收集需要翻译的信息
         public void CollectText(Control value)
         {
+            if (!Exlude.IsValid(value))
+                return;
+            
             CollectTextControl(value);
 
             if (value is ToolStrip)
@@ -149,6 +152,9 @@ namespace MultiLanguage
         #region  init language 获取所有控件的初始文本
         public void InitLanguage(Control value)
         {
+            if (!Exlude.IsValid(value))
+                return;
+
             InitLanguageControl(value);
 
             if (value is ToolStrip)
@@ -196,6 +202,9 @@ namespace MultiLanguage
 
         internal void ChangeLanguage(Control value)
         {
+            if (!Exlude.IsValid(value))
+                return;
+
             ChangeLanguageControl(value);
 
             if (value is ToolStrip)
@@ -225,6 +234,10 @@ namespace MultiLanguage
         {
             return _sourceDict.TryGetValue(hash, out texts);
         }
+        #endregion
+
+        #region exclude
+        public ExcludeManager Exlude = new ExcludeManager();
         #endregion
     }
 

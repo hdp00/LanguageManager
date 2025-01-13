@@ -40,12 +40,14 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.group_Exclude = new System.Windows.Forms.GroupBox();
             this.toolStrip1.SuspendLayout();
+            this.group_Exclude.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_Button
             // 
-            this.btn_Button.Location = new System.Drawing.Point(951, 28);
+            this.btn_Button.Location = new System.Drawing.Point(6, 20);
             this.btn_Button.Name = "btn_Button";
             this.btn_Button.Size = new System.Drawing.Size(154, 23);
             this.btn_Button.TabIndex = 0;
@@ -129,9 +131,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(85, 236);
+            this.button1.Location = new System.Drawing.Point(12, 84);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(154, 23);
+            this.button1.Size = new System.Drawing.Size(121, 23);
             this.button1.TabIndex = 3;
             this.button1.Text = "收集文本";
             this.button1.UseVisualStyleBackColor = true;
@@ -139,26 +141,39 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(613, 219);
+            this.textBox1.Location = new System.Drawing.Point(6, 49);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
+            this.textBox1.Size = new System.Drawing.Size(154, 21);
             this.textBox1.TabIndex = 4;
+            this.textBox1.Text = "收集文本";
+            // 
+            // group_Exclude
+            // 
+            this.group_Exclude.Controls.Add(this.btn_Button);
+            this.group_Exclude.Controls.Add(this.textBox1);
+            this.group_Exclude.Location = new System.Drawing.Point(937, 12);
+            this.group_Exclude.Name = "group_Exclude";
+            this.group_Exclude.Size = new System.Drawing.Size(168, 80);
+            this.group_Exclude.TabIndex = 5;
+            this.group_Exclude.TabStop = false;
+            this.group_Exclude.Text = "排除";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 668);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.group_Exclude);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.btn_Button);
             this.Name = "MainForm";
             this.Text = "演示窗体";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.group_Exclude.ResumeLayout(false);
+            this.group_Exclude.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,6 +192,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.GroupBox group_Exclude;
     }
 }
 

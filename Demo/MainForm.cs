@@ -17,6 +17,7 @@ namespace Demo
         public MainForm()
         {
             InitializeComponent();
+            InitExcludeControl();
         }
 
         #region field
@@ -45,17 +46,19 @@ namespace Demo
 
         #endregion
 
+        #region private function
+        private void InitExcludeControl()
+        {
+            _language.Exlude.AddExcludeName("cmb_Language", "group_Exclude");
+        }
+        #endregion
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //comboBox1.Items.Clear();
-            //comboBox1.Items.AddRange(new object[] { "a", "b" });
-            Test(1, 2);
-            Test(new int[] { 1, 2 });
-            Test();
         }
 
         private void Test(params int[] values)
