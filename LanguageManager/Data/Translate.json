@@ -1,7 +1,13 @@
 {
   "Types": [
-    "zh-CN",
-    "en-US"
+    {
+      "Value": "zh-CN",
+      "Text": "中文"
+    },
+    {
+      "Value": "en-US",
+      "Text": "English"
+    }
   ],
   "Data": {
     "收集文本": [

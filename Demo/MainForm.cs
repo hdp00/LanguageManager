@@ -17,7 +17,7 @@ namespace Demo
         public MainForm()
         {
             InitializeComponent();
-            InitExcludeControl();
+            Init();
         }
 
         #region field
@@ -46,10 +46,24 @@ namespace Demo
 
         #endregion
 
-        #region private function
+        #region init
+        private void Init()
+        {
+            InitExcludeControl();
+            InitLanguageSelectCombo();
+        }
         private void InitExcludeControl()
         {
             _language.Exlude.AddExcludeName("cmb_Language", "group_Exclude");
+        }
+        private void InitLanguageSelectCombo()
+        {
+            ComboBox c = cmb_Language.ComboBox;
+            
+            c.DataSource = _language.TranslateTypes;
+            c.DisplayMember = "Text";
+            c.ValueMember = "Value";
+            c.SelectedIndex = 0;
         }
         #endregion
 
