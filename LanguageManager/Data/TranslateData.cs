@@ -11,10 +11,20 @@ namespace MultiLanguage.Data
     public class TranslateData
     {
         //语言类型
-        public string[] Types { get; set; }
+        public TranslateTypeData[] Types { get; set; }
         //翻译数据
         public Dictionary<string, string[]> Data { get; set; }
     }
+
+    //语言类型
+    public class TranslateTypeData
+    {
+        public string Value { get; set; }
+        public string Text { get; set; }
+
+        public override string ToString() => Value;
+    }
+
 
 }
 

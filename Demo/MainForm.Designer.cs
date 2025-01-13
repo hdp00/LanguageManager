@@ -71,9 +71,6 @@
             // cmb_Language
             // 
             this.cmb_Language.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmb_Language.Items.AddRange(new object[] {
-            "中文",
-            "English"});
             this.cmb_Language.Name = "cmb_Language";
             this.cmb_Language.Size = new System.Drawing.Size(121, 25);
             this.cmb_Language.SelectedIndexChanged += new System.EventHandler(this.cmb_Language_SelectedIndexChanged);

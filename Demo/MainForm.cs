@@ -17,7 +17,7 @@ namespace Demo
         public MainForm()
         {
             InitializeComponent();
-            InitExcludeControl();
+            Init();
         }
 
         #region field
@@ -40,16 +40,30 @@ namespace Demo
             if (_language.IsChangingLanguage)
                 return;
 
-            _language.CurrentLanguage = cmb_Language.SelectedIndex == 0 ? "zh-CN" : "en-US";
+            _language.CurrentLanguage = cmb_Language.SelectedItem.ToString();
             _language.ChangeLanguage(this, true);
         }
 
         #endregion
 
-        #region private function
+        #region init
+        private void Init()
+        {
+            InitExcludeControl();
+            InitLanguageSelectCombo();
+        }
         private void InitExcludeControl()
         {
             _language.Exlude.AddExcludeName("cmb_Language", "group_Exclude");
+        }
+        private void InitLanguageSelectCombo()
+        {
+            ComboBox c = cmb_Language.ComboBox;
+            
+            c.DataSource = _language.TranslateTypes;
+            c.DisplayMember = "Text";
+            c.ValueMember = "Value";
+            c.SelectedIndex = 0;
         }
         #endregion
 

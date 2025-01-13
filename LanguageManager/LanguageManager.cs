@@ -28,22 +28,28 @@ namespace MultiLanguage
         private static LanguageManager _instance = new LanguageManager();
         //实例
         public static LanguageManager Instance => _instance;
+
+        #region language index
         //当前语言索引
         private int _currentLanguageIndex = 0;
         //当前语言
         public string CurrentLanguage
         {
-            get => _translateData.Types[_currentLanguageIndex];
+            get => _translateData.Types[_currentLanguageIndex].Value;
             set
             {
-                int index = Array.IndexOf(_translateData.Types, value);
+                int index = Array.FindIndex(_translateData.Types, x => x.Value == value);
                 if (index >= 0)
                     _currentLanguageIndex = index;
             }
         }
+        public TranslateTypeData[] TranslateTypes => _translateData.Types;
+        #endregion
         //标记是否正在切换语言
         private bool _isChangingLanguage = false;
         public bool IsChangingLanguage => _isChangingLanguage;
+        //管理不需要翻译的控件
+        public ExcludeManager Exlude = new ExcludeManager();
         #endregion
 
         #region field
@@ -234,10 +240,6 @@ namespace MultiLanguage
         {
             return _sourceDict.TryGetValue(hash, out texts);
         }
-        #endregion
-
-        #region exclude
-        public ExcludeManager Exlude = new ExcludeManager();
         #endregion
     }
 
