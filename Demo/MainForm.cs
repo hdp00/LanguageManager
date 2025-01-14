@@ -17,7 +17,6 @@ namespace Demo
         public MainForm()
         {
             InitializeComponent();
-            Init();
         }
 
         #region field
@@ -32,8 +31,7 @@ namespace Demo
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _language.InitLanguage(this);
-            cmb_Language.SelectedIndex = 0;
+            InitLanguage();
         }
         private void cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -47,16 +45,19 @@ namespace Demo
         #endregion
 
         #region init
-        private void Init()
+        private void InitLanguage()
         {
             InitExcludeControl();
-            InitLanguageSelectCombo();
+            InitLanguageSelectComboBox();
+            _language.InitLanguage(this);
+
+            cmb_Language_SelectedIndexChanged(null, null);
         }
         private void InitExcludeControl()
         {
             _language.Exlude.AddExcludeName("cmb_Language", "group_Exclude");
         }
-        private void InitLanguageSelectCombo()
+        private void InitLanguageSelectComboBox()
         {
             ComboBox c = cmb_Language.ComboBox;
             
@@ -64,6 +65,7 @@ namespace Demo
             c.DisplayMember = "Text";
             c.ValueMember = "Value";
             c.SelectedIndex = 0;
+            c.SelectedValueChanged += cmb_Language_SelectedIndexChanged;
         }
         #endregion
 
