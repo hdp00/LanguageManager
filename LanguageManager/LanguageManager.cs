@@ -158,6 +158,11 @@ namespace MultiLanguage
         #region  init language 获取所有控件的初始文本
         public void InitLanguage(Control value)
         {
+            InitLanguageFunc(value);
+        }
+
+        private void InitLanguageFunc(Control value)
+        {
             if (!Exlude.IsValid(value))
                 return;
 
@@ -167,7 +172,7 @@ namespace MultiLanguage
                 return;
             foreach (Control item in value.Controls)
             {
-                InitLanguage(item);
+                InitLanguageFunc(item);
             }
         }
         private void InitLanguageControl(Control value)
@@ -189,24 +194,22 @@ namespace MultiLanguage
         {
             if (Array.Exists(texts, text => !string.IsNullOrWhiteSpace(text)))
             {
-                _sourceDict[hash] = texts;
+                CurrentSourceDict[hash] = texts;
             }
         }
         #endregion
 
         #region change language 切换语言
-        public void ChangeLanguage(Control value, bool needChangeSign)
+        public void ChangeLanguage(Control value)
         {
-            if (needChangeSign)
-                _isChangingLanguage = true;
+            _isChangingLanguage = true;
 
-            ChangeLanguage(value);
+            ChangeLanguageFunc(value);
 
-            if (needChangeSign)
-                _isChangingLanguage = false;
+            _isChangingLanguage = false;
         }
 
-        internal void ChangeLanguage(Control value)
+        internal void ChangeLanguageFunc(Control value)
         {
             if (!Exlude.IsValid(value))
                 return;
@@ -217,7 +220,7 @@ namespace MultiLanguage
                 return;
             foreach (Control item in value.Controls)
             {
-                ChangeLanguage(item);
+                ChangeLanguageFunc(item);
             }
         }
         private void ChangeLanguageControl(Control value)
@@ -243,7 +246,48 @@ namespace MultiLanguage
         #endregion
 
         #region dynamic form
+        private Dictionary<int, string[]> _currentSourceDict = new Dictionary<int, string[]>();
+        //用于切换主窗体和动态窗体的SourceDict
+        private Dictionary<int, string[]> CurrentSourceDict
+        { 
+            get => _currentSourceDict;
+            set { _currentSourceDict = value == null ? _sourceDict : value; }
+        }
+        //动态窗体字典 [form_hash, DynamicFormManager]
+        private Dictionary<int, DynamicFormManager> _dynamicFormDict = new Dictionary<int, DynamicFormManager>();
 
+        public DynamicFormManager AddDynamicForm(Form value)
+        {
+            DynamicFormManager m = new DynamicFormManager(this, value);
+            _dynamicFormDict[value.GetHashCode()] = m;
+            value.FormClosed += DynamicFormClosed;
+
+            return null;
+        }
+
+
+
+        internal void InitLanguageDynamicForm(Control value, Dictionary<int, string[]> sourceDict)
+        {
+            CurrentSourceDict = sourceDict;
+
+            InitLanguageFunc(value);
+
+            CurrentSourceDict = null;
+        }
+        internal void ChangeLanguageDynamicForm(Control value, Dictionary<int, string[]> sourceDict)
+        {
+            CurrentSourceDict = sourceDict;
+
+            ChangeLanguageFunc(value);
+
+            CurrentSourceDict = null;
+        }
+
+        private void DynamicFormClosed(object sender, FormClosedEventArgs e)
+        {
+            _dynamicFormDict.Remove(sender.GetHashCode());
+        }
         #endregion
     }
 
@@ -252,31 +296,30 @@ namespace MultiLanguage
     {
         public DynamicFormManager(LanguageManager container, Form form) 
         {
-            _Container = container;
-            _Form = form;
+            _container = container;
+            _form = form;
 
             InitLanguage();
         }
         
         #region field
-        private Form _Form;
-        private LanguageManager _Container;
+        private Form _form;
+        private LanguageManager _container;
         //<hash, texts> 初始的文本数据
         private Dictionary<int, string[]> _sourceDict = new Dictionary<int, string[]>();
         #endregion
 
         #region public function
-
         public void ChangeLanguage()
         { 
-        
+            _container.ChangeLanguageDynamicForm(_form, _sourceDict);
         }
         #endregion
 
         #region private function
         private void InitLanguage()
         {
-
+            _container.InitLanguageDynamicForm(_form, _sourceDict);
         }
         #endregion
     }

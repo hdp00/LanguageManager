@@ -120,7 +120,7 @@ namespace MultiLanguage
 
             if (value is ToolStripControlHost)
             {
-                Container.ChangeLanguage((value as ToolStripControlHost).Control);
+                Container.ChangeLanguageFunc((value as ToolStripControlHost).Control);
             }
             else
             {

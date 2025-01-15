@@ -26,8 +26,6 @@ namespace Demo
         #region event
         private void btn_CollectText_Click(object sender, EventArgs e)
         {
-            _language.CollectText(this);
-            _language.SaveTranslateData();
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -39,7 +37,7 @@ namespace Demo
                 return;
 
             _language.CurrentLanguage = cmb_Language.SelectedItem.ToString();
-            _language.ChangeLanguage(this, true);
+            _language.ChangeLanguage(this);
         }
 
         #endregion
@@ -49,8 +47,11 @@ namespace Demo
         {
             InitExcludeControl();
             InitLanguageSelectComboBox();
-            _language.InitLanguage(this);
 
+            //_language.CollectText(this);
+            //_language.SaveTranslateData();
+
+            _language.InitLanguage(this);
             cmb_Language_SelectedIndexChanged(null, null);
         }
         private void InitExcludeControl()
