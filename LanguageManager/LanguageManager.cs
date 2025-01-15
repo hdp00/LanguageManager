@@ -117,7 +117,7 @@ namespace MultiLanguage
         {
             if (!Exlude.IsValid(value))
                 return;
-            
+
             CollectTextControl(value);
 
             if (value is ToolStrip)
@@ -239,6 +239,44 @@ namespace MultiLanguage
         internal bool GetSourceText(int hash, out string[] texts)
         {
             return _sourceDict.TryGetValue(hash, out texts);
+        }
+        #endregion
+
+        #region dynamic form
+
+        #endregion
+    }
+
+    //用于翻译动态创建的窗体
+    public class DynamicFormManager
+    {
+        public DynamicFormManager(LanguageManager container, Form form) 
+        {
+            _Container = container;
+            _Form = form;
+
+            InitLanguage();
+        }
+        
+        #region field
+        private Form _Form;
+        private LanguageManager _Container;
+        //<hash, texts> 初始的文本数据
+        private Dictionary<int, string[]> _sourceDict = new Dictionary<int, string[]>();
+        #endregion
+
+        #region public function
+
+        public void ChangeLanguage()
+        { 
+        
+        }
+        #endregion
+
+        #region private function
+        private void InitLanguage()
+        {
+
         }
         #endregion
     }
