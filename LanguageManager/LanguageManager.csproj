@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="ControlOperation.cs" />
     <Compile Include="Data\TranslateData.cs" />
+    <Compile Include="DynamicFormManager.cs" />
     <Compile Include="ExcludeManager.cs" />
     <Compile Include="LanguageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

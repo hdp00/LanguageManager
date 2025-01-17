@@ -56,7 +56,7 @@ namespace Demo
         }
         private void InitExcludeControl()
         {
-            _language.Exlude.AddExcludeName("cmb_Language", "group_Exclude");
+            _language.Exclude.AddExcludeName("cmb_Language", "group_Exclude");
         }
         private void InitLanguageSelectComboBox()
         {

@@ -49,7 +49,7 @@ namespace MultiLanguage
         private bool _isChangingLanguage = false;
         public bool IsChangingLanguage => _isChangingLanguage;
         //管理不需要翻译的控件
-        public ExcludeManager Exlude = new ExcludeManager();
+        public ExcludeManager Exclude = new ExcludeManager();
         #endregion
 
         #region field
@@ -115,7 +115,11 @@ namespace MultiLanguage
         #region collect text. 收集需要翻译的信息
         public void CollectText(Control value)
         {
-            if (!Exlude.IsValid(value))
+            CollectTextFunc(value);
+        }
+        private void CollectTextFunc(Control value)
+        {
+            if (!CurrentExclude.IsValid(value))
                 return;
 
             CollectTextControl(value);
@@ -124,7 +128,7 @@ namespace MultiLanguage
                 return;
             foreach (Control item in value.Controls)
             {
-                CollectText(item);
+                CollectTextFunc(item);
             }
         }
         private void CollectTextControl(Control value)
@@ -161,9 +165,11 @@ namespace MultiLanguage
             InitLanguageFunc(value);
         }
 
-        private void InitLanguageFunc(Control value)
+        internal void InitLanguageFunc(Control value)
         {
-            if (!Exlude.IsValid(value))
+            if (!CurrentExclude.IsValid(value))
+                return;
+            if (!IsOperatingDynamicForm && IsDynamicForm(value))
                 return;
 
             InitLanguageControl(value);
@@ -205,13 +211,17 @@ namespace MultiLanguage
             _isChangingLanguage = true;
 
             ChangeLanguageFunc(value);
+            ChangeLanguageAllDynamicForm();
 
             _isChangingLanguage = false;
         }
 
         internal void ChangeLanguageFunc(Control value)
         {
-            if (!Exlude.IsValid(value))
+            if (!CurrentExclude.IsValid(value))
+                return;
+            //主窗体碰到动态窗体时不再翻译，避免重复
+            if (!IsOperatingDynamicForm && IsDynamicForm(value))
                 return;
 
             ChangeLanguageControl(value);
@@ -241,18 +251,28 @@ namespace MultiLanguage
         }
         internal bool GetSourceText(int hash, out string[] texts)
         {
-            return _sourceDict.TryGetValue(hash, out texts);
+            return CurrentSourceDict.TryGetValue(hash, out texts);
         }
         #endregion
 
         #region dynamic form
-        private Dictionary<int, string[]> _currentSourceDict = new Dictionary<int, string[]>();
+        private Dictionary<int, string[]> _currentSourceDict;
         //用于切换主窗体和动态窗体的SourceDict
-        private Dictionary<int, string[]> CurrentSourceDict
+        internal Dictionary<int, string[]> CurrentSourceDict
         { 
             get => _currentSourceDict;
             set { _currentSourceDict = value == null ? _sourceDict : value; }
         }
+        //用于切换主窗体和动态窗体的Exclude
+        private ExcludeManager _currentExclude;
+        internal ExcludeManager CurrentExclude
+        { 
+            get => _currentExclude;
+            set { _currentExclude = value == null ? Exclude : value; }
+        }
+        //是否正在执行动态窗体
+        private bool IsOperatingDynamicForm => _currentExclude != null;
+
         //动态窗体字典 [form_hash, DynamicFormManager]
         private Dictionary<int, DynamicFormManager> _dynamicFormDict = new Dictionary<int, DynamicFormManager>();
 
@@ -262,66 +282,24 @@ namespace MultiLanguage
             _dynamicFormDict[value.GetHashCode()] = m;
             value.FormClosed += DynamicFormClosed;
 
-            return null;
-        }
-
-
-
-        internal void InitLanguageDynamicForm(Control value, Dictionary<int, string[]> sourceDict)
-        {
-            CurrentSourceDict = sourceDict;
-
-            InitLanguageFunc(value);
-
-            CurrentSourceDict = null;
-        }
-        internal void ChangeLanguageDynamicForm(Control value, Dictionary<int, string[]> sourceDict)
-        {
-            CurrentSourceDict = sourceDict;
-
-            ChangeLanguageFunc(value);
-
-            CurrentSourceDict = null;
+            return m;
         }
 
         private void DynamicFormClosed(object sender, FormClosedEventArgs e)
         {
             _dynamicFormDict.Remove(sender.GetHashCode());
         }
-        #endregion
-    }
-
-    //用于翻译动态创建的窗体
-    public class DynamicFormManager
-    {
-        public DynamicFormManager(LanguageManager container, Form form) 
-        {
-            _container = container;
-            _form = form;
-
-            InitLanguage();
-        }
-        
-        #region field
-        private Form _form;
-        private LanguageManager _container;
-        //<hash, texts> 初始的文本数据
-        private Dictionary<int, string[]> _sourceDict = new Dictionary<int, string[]>();
-        #endregion
-
-        #region public function
-        public void ChangeLanguage()
+        private bool IsDynamicForm(Control value)
         { 
-            _container.ChangeLanguageDynamicForm(_form, _sourceDict);
+            return (value is Form) && _dynamicFormDict.ContainsKey(value.GetHashCode());
         }
-        #endregion
-
-        #region private function
-        private void InitLanguage()
+        private void ChangeLanguageAllDynamicForm()
         {
-            _container.InitLanguageDynamicForm(_form, _sourceDict);
+            foreach (DynamicFormManager item in _dynamicFormDict.Values)
+            {
+                item.ChangeLanguage();
+            }
         }
         #endregion
     }
-
 }
