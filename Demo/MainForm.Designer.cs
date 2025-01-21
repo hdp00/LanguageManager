@@ -41,6 +41,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.group_Exclude = new System.Windows.Forms.GroupBox();
+            this.btn_NewForm = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.group_Exclude.SuspendLayout();
             this.SuspendLayout();
@@ -145,14 +146,25 @@
             // 
             // group_Exclude
             // 
+            this.group_Exclude.Controls.Add(this.btn_NewForm);
             this.group_Exclude.Controls.Add(this.btn_Button);
             this.group_Exclude.Controls.Add(this.textBox1);
             this.group_Exclude.Location = new System.Drawing.Point(937, 12);
             this.group_Exclude.Name = "group_Exclude";
-            this.group_Exclude.Size = new System.Drawing.Size(168, 80);
+            this.group_Exclude.Size = new System.Drawing.Size(168, 113);
             this.group_Exclude.TabIndex = 5;
             this.group_Exclude.TabStop = false;
             this.group_Exclude.Text = "排除";
+            // 
+            // btn_NewForm
+            // 
+            this.btn_NewForm.Location = new System.Drawing.Point(8, 76);
+            this.btn_NewForm.Name = "btn_NewForm";
+            this.btn_NewForm.Size = new System.Drawing.Size(154, 23);
+            this.btn_NewForm.TabIndex = 6;
+            this.btn_NewForm.Text = "新建窗体";
+            this.btn_NewForm.UseVisualStyleBackColor = true;
+            this.btn_NewForm.Click += new System.EventHandler(this.btn_NewForm_Click);
             // 
             // MainForm
             // 
@@ -189,6 +201,7 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.GroupBox group_Exclude;
+        private System.Windows.Forms.Button btn_NewForm;
     }
 }
 

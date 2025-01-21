@@ -29,6 +29,7 @@
     "工具栏A": [ null, "Tool A" ],
     "工具栏B": [ null, "Tool B" ],
     "工具栏C": [ null, "Tool C" ],
-    "工具栏D": [ null, "Tool D" ]
+    "工具栏D": [ null, "Tool D" ],
+    "新建窗体": [ null, "New Form"]
   }
 }

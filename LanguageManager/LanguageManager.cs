@@ -259,16 +259,16 @@ namespace MultiLanguage
         private Dictionary<int, string[]> _currentSourceDict;
         //用于切换主窗体和动态窗体的SourceDict
         internal Dictionary<int, string[]> CurrentSourceDict
-        { 
-            get => _currentSourceDict;
-            set { _currentSourceDict = value == null ? _sourceDict : value; }
+        {
+            get => _currentSourceDict == null ? _sourceDict : _currentSourceDict;
+            set => _currentSourceDict = value;
         }
         //用于切换主窗体和动态窗体的Exclude
         private ExcludeManager _currentExclude;
         internal ExcludeManager CurrentExclude
-        { 
-            get => _currentExclude;
-            set { _currentExclude = value == null ? Exclude : value; }
+        {
+            get => _currentExclude == null ? Exclude : _currentExclude;
+            set => _currentExclude = value;
         }
         //是否正在执行动态窗体
         private bool IsOperatingDynamicForm => _currentExclude != null;
@@ -276,7 +276,7 @@ namespace MultiLanguage
         //动态窗体字典 [form_hash, DynamicFormManager]
         private Dictionary<int, DynamicFormManager> _dynamicFormDict = new Dictionary<int, DynamicFormManager>();
 
-        public DynamicFormManager AddDynamicForm(Form value)
+        public DynamicFormManager InitDynamicForm(Form value)
         {
             DynamicFormManager m = new DynamicFormManager(this, value);
             _dynamicFormDict[value.GetHashCode()] = m;
