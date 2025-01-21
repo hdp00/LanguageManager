@@ -176,15 +176,7 @@ namespace MultiLanguage
         }
         private void InitLanguageControl(Control value)
         {
-            if (value is ToolStrip)
-            {
-                _oper.ToolStrip.InitLanguage((ToolStrip)value);
-            }
-            else if (value is ComboBox)
-            {
-                _oper.ComboBox.InitLanguage((ComboBox)value);
-            }
-            else
+            if (!_oper.InitLanguage(value))
             {
                 FillSourceDict(value.GetHashCode(), value.Text);
             }
@@ -228,15 +220,7 @@ namespace MultiLanguage
         }
         private void ChangeLanguageControl(Control value)
         {
-            if (value is ToolStrip)
-            {
-                _oper.ToolStrip.ChangeLanguage((ToolStrip)value);
-            }
-            else if (value is ComboBox)
-            {
-                _oper.ComboBox.ChangeLanguage((ComboBox)value);
-            }
-            else
+            if (!_oper.ChangeLanguage(value))
             {
                 if (GetSourceText(value.GetHashCode(), out string[] texts))
                     value.Text = TranslateText(texts[0]);

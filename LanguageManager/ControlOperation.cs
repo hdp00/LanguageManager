@@ -40,6 +40,26 @@ namespace MultiLanguage
 
             return true;
         }
+        public bool InitLanguage(Control value)
+        {
+            if (value is ToolStrip)
+                ToolStrip.InitLanguage((ToolStrip)value);
+            else if (value is ComboBox)
+                ComboBox.InitLanguage((ComboBox)value);
+            else
+                return false;
+            return true;
+        }
+        public bool ChangeLanguage(Control value)
+        {
+            if (value is ToolStrip)
+                ToolStrip.ChangeLanguage((ToolStrip)value);
+            else if (value is ComboBox)
+                ComboBox.ChangeLanguage((ComboBox)value);
+            else
+                return false;
+            return true;
+        }
         #endregion
     }
     public class ControlOperation
