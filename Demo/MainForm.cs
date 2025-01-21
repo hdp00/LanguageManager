@@ -42,7 +42,7 @@ namespace Demo
         private void btn_NewForm_Click(object sender, EventArgs e)
         {
             DynamicForm f = new DynamicForm();
-            f.Show();
+            f.ShowDialog();
         }
         #endregion
 

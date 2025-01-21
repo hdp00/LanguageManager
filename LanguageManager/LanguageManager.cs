@@ -14,6 +14,7 @@ using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Security.Policy;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 
 namespace MultiLanguage
 {
@@ -283,6 +284,10 @@ namespace MultiLanguage
             value.FormClosed += DynamicFormClosed;
 
             return m;
+        }
+        public DynamicFormManager InitDialog(Form value)
+        {
+            return new DynamicFormManager(this, value);
         }
 
         private void DynamicFormClosed(object sender, FormClosedEventArgs e)
