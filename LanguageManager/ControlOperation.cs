@@ -27,6 +27,20 @@ namespace MultiLanguage
         #region field
         private readonly LanguageManager _container;
         #endregion
+
+        #region public function
+        public bool CollectText(Control value)
+        {
+            if (value is ToolStrip)
+                ToolStrip.CollectText((ToolStrip)value);
+            else if (value is ComboBox)
+                ComboBox.CollectText((ComboBox)value);
+            else
+                return false;
+
+            return true;
+        }
+        #endregion
     }
     public class ControlOperation
     {

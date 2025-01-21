@@ -134,15 +134,7 @@ namespace MultiLanguage
         }
         private void CollectTextControl(Control value)
         {
-            if (value is ToolStrip)
-            {
-                _oper.ToolStrip.CollectText((ToolStrip)value);
-            }
-            else if (value is ComboBox)
-            {
-                _oper.ComboBox.CollectText((ComboBox)value);
-            }
-            else
+            if (!_oper.CollectText(value))
             {
                 FillTranslateDict(value.Text);
             }
