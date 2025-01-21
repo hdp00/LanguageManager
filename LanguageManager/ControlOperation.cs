@@ -22,6 +22,7 @@ namespace MultiLanguage
         #region property
         public ToolStripOperation ToolStrip => new ToolStripOperation(_container);
         public ComboBoxOperation ComboBox => new ComboBoxOperation(_container);
+        public TreeViewOperation TreeView => new TreeViewOperation(_container);
         #endregion
 
         #region field
@@ -35,6 +36,8 @@ namespace MultiLanguage
                 ToolStrip.CollectText((ToolStrip)value);
             else if (value is ComboBox)
                 ComboBox.CollectText((ComboBox)value);
+            else if (value is TreeView)
+                TreeView.CollectText((TreeView)value);
             else
                 return false;
 
@@ -46,6 +49,8 @@ namespace MultiLanguage
                 ToolStrip.InitLanguage((ToolStrip)value);
             else if (value is ComboBox)
                 ComboBox.InitLanguage((ComboBox)value);
+            else if (value is TreeView)
+                TreeView.InitLanguage((TreeView)value);
             else
                 return false;
             return true;
@@ -56,6 +61,8 @@ namespace MultiLanguage
                 ToolStrip.ChangeLanguage((ToolStrip)value);
             else if (value is ComboBox)
                 ComboBox.ChangeLanguage((ComboBox)value);
+            else if (value is TreeView)
+                TreeView.ChangeLanguage((TreeView)value);
             else
                 return false;
             return true;
@@ -113,8 +120,7 @@ namespace MultiLanguage
         {
             foreach (ToolStripItem item in value.Items)
             {
-                if (Container.Exclude.IsValid(item))
-                    InitLanguageToolStripItem(item);
+                InitLanguageToolStripItem(item);
             }
         }
         private void InitLanguageToolStripItem(ToolStripItem value)
@@ -212,6 +218,77 @@ namespace MultiLanguage
                 }
             }
         }
+    }
+    public class TreeViewOperation : ControlOperation
+    {
+        public TreeViewOperation(LanguageManager container) : base(container) { }
+
+        #region collect text
+        public void CollectText(TreeView value)
+        {
+            foreach (TreeNode item in value.Nodes)
+            {
+                CollectTextNode(item);
+            }
+        }
+        private void CollectTextNode(TreeNode value)
+        {
+            if (!Container.Exclude.IsValid(value))
+                return;
+
+            Container.FillTranslateDict(value.Text);
+            foreach (TreeNode item in value.Nodes)
+            {
+                CollectTextNode(item);
+            }
+        }
+        #endregion
+
+        #region init language
+        public void InitLanguage(TreeView value)
+        {
+            foreach (TreeNode item in value.Nodes)
+            {
+                InitLanguageNode(item);
+            }
+        }
+        private void InitLanguageNode(TreeNode value)
+        {
+            if (!Container.Exclude.IsValid(value))
+                return;
+
+            Container.FillSourceDict(value.GetHashCode(), value.Text, value.ToolTipText);
+            foreach (TreeNode item in value.Nodes)
+            {
+                InitLanguageNode(item);
+            }
+        }
+        #endregion
+
+        #region change language
+        public void ChangeLanguage(TreeView value)
+        {
+            foreach (TreeNode item in value.Nodes)
+            {
+                ChangeLanguaeNode(item);
+            }
+        }
+        private void ChangeLanguaeNode(TreeNode value)
+        {
+            if (!Container.Exclude.IsValid(value))
+                return;
+
+            if (Container.GetSourceText(value.GetHashCode(), out string[] texts))
+            {
+                value.Text = Container.TranslateText(texts[0]);
+                value.ToolTipText = Container.TranslateText(texts[1]);
+            }
+            foreach (TreeNode item in value.Nodes)
+            {
+                ChangeLanguaeNode(item);
+            }
+        }
+        #endregion
     }
     #endregion
 }

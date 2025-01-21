@@ -47,6 +47,8 @@ namespace MultiLanguage
                 return ((Control)value).Name;
             if (value is ToolStripItem)
                 return ((ToolStripItem)value).Name;
+            if (value is TreeNode)
+                return ((TreeNode)value).Name;
 
             return null;
         }
@@ -75,13 +77,16 @@ namespace MultiLanguage
     public class ExcludeClass
     {
         #region property
-        public bool TextBox = true;
+        public bool TextBox = false;
+        public bool TreeView = false;
         #endregion
 
         #region public function
         public bool IsValid(object value)
         {
             if (TextBox && value is TextBoxBase)
+                return false;
+            if (TreeView && value is TreeView)
                 return false;
 
             return true;

@@ -60,6 +60,7 @@ namespace Demo
         }
         private void InitExcludeControl()
         {
+            _language.Exclude.ExcludeClass.TextBox = true;
             _language.Exclude.AddExcludeName("cmb_Language", "group_Exclude");
         }
         private void InitLanguageSelectComboBox()
@@ -84,6 +85,7 @@ namespace Demo
 
         private void Test(params int[] values)
         {
+            
         }
 
 
