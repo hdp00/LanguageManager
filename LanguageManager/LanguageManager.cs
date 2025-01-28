@@ -103,6 +103,7 @@ namespace MultiLanguage
         {
             try
             {
+                _translateData.Sort();
                 string text = JsonConvert.SerializeObject(_translateData, Formatting.Indented);
                 File.WriteAllText(TranslateFileName, text);
             }

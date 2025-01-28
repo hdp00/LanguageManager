@@ -14,6 +14,15 @@ namespace MultiLanguage.Data
         public TranslateTypeData[] Types { get; set; }
         //翻译数据
         public Dictionary<string, string[]> Data { get; set; }
+
+        public void Sort()
+        {
+            Dictionary<string, string[]> sortedDict = new Dictionary<string, string[]>();
+            List<string> keys = new List<string>(Data.Keys);
+            keys.Sort();
+            keys.ForEach(key => sortedDict.Add(key, Data[key]));
+            Data = sortedDict;
+        }
     }
 
     //语言类型
