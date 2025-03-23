@@ -46,6 +46,7 @@ namespace MultiLanguage
         }
         public TranslateTypeData[] TranslateTypes => _translateData.Types;
         #endregion
+
         //标记是否正在切换语言
         private bool _isChangingLanguage = false;
         public bool IsChangingLanguage => _isChangingLanguage;
@@ -218,6 +219,8 @@ namespace MultiLanguage
             {
                 ChangeLanguageFunc(item);
             }
+
+            (value as ILanguageForm)?.ChangeLanguage();
         }
         private void ChangeLanguageControl(Control value)
         {

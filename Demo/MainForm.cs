@@ -12,7 +12,7 @@ using MultiLanguage;
 
 namespace Demo
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, ILanguageForm
     {
         public MainForm()
         {
@@ -72,6 +72,13 @@ namespace Demo
             c.ValueMember = "Value";
             c.SelectedIndex = 0;
             c.SelectedValueChanged += cmb_Language_SelectedIndexChanged;
+        }
+        #endregion
+
+        #region ILanguageForm
+        public void ChangeLanguage()
+        {
+            lable_Additional.Text = _language.TranslateText("页面A");
         }
         #endregion
 

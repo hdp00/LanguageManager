@@ -80,7 +80,7 @@ namespace MultiLanguage
     }
     #endregion
 
-    #region control
+    #region items
     public class ToolStripOperation : ControlOperation
     {
         public ToolStripOperation(LanguageManager container) : base(container) { }
@@ -290,5 +290,6 @@ namespace MultiLanguage
         }
         #endregion
     }
+
     #endregion
 }

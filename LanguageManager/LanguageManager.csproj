@@ -56,6 +56,7 @@
     <Compile Include="Data\TranslateData.cs" />
     <Compile Include="DynamicFormManager.cs" />
     <Compile Include="ExcludeManager.cs" />
+    <Compile Include="Interface\ILanguageForm.cs" />
     <Compile Include="LanguageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
