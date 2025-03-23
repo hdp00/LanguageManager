@@ -31,14 +31,6 @@ namespace Demo
         {
             InitLanguage();
         }
-        private void cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_language.IsChangingLanguage)
-                return;
-
-            _language.CurrentLanguage = cmb_Language.SelectedItem.ToString();
-            _language.ChangeLanguage(this);
-        }
         private void btn_NewForm_Click(object sender, EventArgs e)
         {
             DynamicForm f = new DynamicForm();
@@ -50,28 +42,18 @@ namespace Demo
         private void InitLanguage()
         {
             InitExcludeControl();
-            InitLanguageSelectComboBox();
+            _language.InitLanguageSelectComboBox(this, cmb_Language.ComboBox);
 
             //_language.CollectText(this);
             //_language.SaveTranslateData();
 
             _language.InitLanguage(this);
-            cmb_Language_SelectedIndexChanged(null, null);
+            _language.ChangeLanguage(this);
         }
         private void InitExcludeControl()
         {
             _language.Exclude.ExcludeClass.TextBox = true;
             _language.Exclude.AddExcludeName("cmb_Language", "group_Exclude");
-        }
-        private void InitLanguageSelectComboBox()
-        {
-            ComboBox c = cmb_Language.ComboBox;
-            
-            c.DataSource = _language.TranslateTypes;
-            c.DisplayMember = "Text";
-            c.ValueMember = "Value";
-            c.SelectedIndex = 0;
-            c.SelectedValueChanged += cmb_Language_SelectedIndexChanged;
         }
         #endregion
 

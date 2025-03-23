@@ -77,6 +77,11 @@ namespace MultiLanguage
 
             return text;
         }
+        //初始化语言切换控件
+        public void InitLanguageSelectComboBox(Form main, ComboBox comboBox)
+        { 
+            new LanguageSelectCombox(this, main, comboBox);
+        }
         #endregion
 
         #region private function
